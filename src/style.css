@@ -1,0 +1,40 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    overflow: hidden;
+}
+canvas {
+    display: block;
+    background: #000;
+}
+
+#centers {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    font-size: 20px;
+}
+#current_n {
+    font-size: 20px;
+}
+#wasm, #simple {
+    width: 20px;
+    height: 20px;
+}
+#title {
+    position: absolute;
+    text-align: right;
+    color: chartreuse;
+    top: 20px;
+    right: 40px;
+    font-size: 50px;
+}
+#title2 {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    text-align: center;
+    color: blueviolet;
+    bottom: 40px;
+    font-size: 50px;
+}
