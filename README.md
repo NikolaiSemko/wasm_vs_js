@@ -1,6 +1,8 @@
 # wasm_vs_js
 An example of WebAssembly running on canvas and comparing performance with JS
 
+Commands:
+
 cargo new wasm_vs_js
 
 cd wasm_vs_js
