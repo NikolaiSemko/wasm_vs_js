@@ -2,17 +2,18 @@ let N = 5;
 let IsWasm = false;
 let first = true;
 let simpleMode = false;
-fetch('./pkg/wasm_vs_js_bg.wasm').then(response =>
-    response.arrayBuffer()
-).then(bytes =>
-    // the Rust side needs a cos function
-    WebAssembly.instantiate(bytes, {env: {cos: Math.cos}})
+const importObject = {
+    module: {},
+    env: {
+        memory: new WebAssembly.Memory({ initial: 256 }),
+    }
+};
+WebAssembly.instantiateStreaming(fetch("./pkg/wasm_vs_js_bg.wasm"), importObject
 ).then(results => {
-    let module = {};
     let mod = results.instance;
-    module.alloc = mod.exports.alloc;
-    module.dealloc = mod.exports.dealloc;
-    module.fill = mod.exports.fill;
+    importObject.module.alloc = mod.exports.alloc;
+    importObject.module.dealloc = mod.exports.dealloc;
+    importObject.module.fill = mod.exports.fill;
 
     class Animation {
         constructor() {
@@ -108,7 +109,7 @@ fetch('./pkg/wasm_vs_js_bg.wasm').then(response =>
             let deltaH = Math.ceil(25800 / (this.size.w * 4));
 
             this.byteSize = this.size.w * this.size.h * 4 + deltaH * this.size.w * 4;
-            this.pointer = module.alloc(this.byteSize);
+            this.pointer = importObject.module.alloc(this.byteSize);
             this.bmp = new Uint8ClampedArray(mod.exports.memory.buffer, this.pointer, this.byteSize);
             this.img = new ImageData(this.bmp, this.size.w, this.size.h + deltaH);
 
@@ -179,7 +180,7 @@ fetch('./pkg/wasm_vs_js_bg.wasm').then(response =>
                 }
             } else {
                 this.timedelta = performance.now();
-                module.fill(this.pointer, this.size.w, this.size.h, N, this.j, simpleMode);
+                importObject.module.fill(this.pointer, this.size.w, this.size.h, N, this.j, simpleMode);
                 //module.fill(this.pointer, this.size.w, this.size.h, this.total);
                 this.timedelta = performance.now() - this.timedelta;
             }
