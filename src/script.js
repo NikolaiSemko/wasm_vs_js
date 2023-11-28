@@ -197,6 +197,8 @@ WebAssembly.instantiateStreaming(fetch("./pkg/wasm_vs_js_bg.wasm"), importObject
             this.perf += this.timedelta;
             this.total++;
             this.ctx.fillStyle = "#FFFFFF80";
+            let running = (IsWasm)?'WebAssembly':'JavaScript';
+            this.ctx.fillText(running+' is running now', this.size.cx, this.size.cy-40);
             this.ctx.fillText('Framing time = ' + (this.perf / this.total).toFixed(2) + ' milliseconds', this.size.cx, this.size.cy);
             this.ctx.fillStyle = "#00000080";
             this.ctx.fillText('Framing time = ' + (this.perf / this.total).toFixed(2) + ' milliseconds', this.size.cx, this.size.cy+40);
